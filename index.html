@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real-Time Chat App</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.js">
     <style>
         /* --- Basic Setup & Variables --- */
         :root { 
@@ -249,6 +249,7 @@
             font-size: 0.9rem;
             display: inline-block;
             margin-top: 5px;
+            cursor: pointer;
         }
 
         /* --- Tabs: Friends, Requests, Search --- */
@@ -290,14 +291,15 @@
         /* --- Search Area --- */
         #search-container { 
             margin-bottom: 15px;
+            position: relative;
         }
         
         #search-container input { 
             width: 100%; 
-            padding: 12px 15px; 
+            padding: 12px 15px 12px 40px; 
             border-radius: 20px; 
             border: 1px solid var(--border-color); 
-            font-size: 1em; 
+            font-size: 1rem; 
             background-color: #f0f2f5;
             transition: all 0.2s;
         }
@@ -306,6 +308,14 @@
             outline: none;
             border-color: var(--theme-color);
             box-shadow: 0 0 0 2px rgba(0, 132, 255, 0.2);
+        }
+        
+        #search-container .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
         }
         
         #search-results { 
@@ -321,6 +331,7 @@
             cursor: pointer; 
             margin-bottom: 8px; 
             transition: all 0.2s;
+            position: relative;
         }
         
         .list-item:hover { 
@@ -338,16 +349,24 @@
         
         .list-item .info { 
             flex-grow: 1; 
+            min-width: 0;
         }
         
         .list-item .info strong { 
             font-size: 1.1em; 
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         
         .list-item .info p { 
             font-size: 0.9rem; 
             color: var(--text-secondary);
             margin-top: 3px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         
         .list-item .actions { 
@@ -359,8 +378,21 @@
             padding: 6px 12px; 
             border-radius: 15px; 
             font-size: 0.9rem;
+            min-width: 80px;
+            text-align: center;
         }
         
+        .online-indicator {
+            position: absolute;
+            bottom: 15px;
+            left: 45px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--online-green);
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
         /* --- Main Chat Area --- */
         #welcome-screen { 
             text-align: center; 
@@ -476,6 +508,8 @@
             border-radius: 18px; 
             line-height: 1.4; 
             box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            word-wrap: break-word;
+            max-width: 100%;
         }
         
         .message-bubble.sent { 
@@ -499,6 +533,7 @@
             color: var(--text-secondary);
             margin-top: 5px;
             text-align: right;
+            padding: 0 10px;
         }
         
         .message-bubble.sent .info {
@@ -635,7 +670,7 @@
                 <div id="my-profile">
                     <div class="name">Your Name</div>
                     <p>Your Unique ID:</p>
-                    <span id="my-chat-id">loading...</span>
+                    <span id="my-chat-id" title="Click to copy">loading...</span>
                 </div>
                 <button id="signOutBtn" title="Sign Out">
                     <i class="fas fa-sign-out-alt"></i>
@@ -670,6 +705,7 @@
             </div>
             <div class="tab-content hidden" id="search-tab">
                 <div id="search-container">
+                    <i class="fas fa-search search-icon"></i>
                     <input type="search" id="search-input" placeholder="Search by unique ID or name...">
                 </div>
                 <div id="search-results">
@@ -695,38 +731,14 @@
                     <button class="menu-toggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <img src="https://ui-avatars.com/api/?name=Friend&background=random" alt="Friend avatar">
+                    <img id="chat-avatar" src="https://ui-avatars.com/api/?name=Friend&background=random" alt="Friend avatar">
                     <div>
-                        <div>Sarah Miller</div>
+                        <div id="chat-name">Friend Name</div>
                         <div class="status"><span class="status-indicator"></span> Online</div>
                     </div>
                 </header>
                 <div id="messages">
-                    <div class="message-bubble received">
-                        <div class="text">Hello there! 👋</div>
-                        <div class="info">10:30 AM</div>
-                    </div>
-                    <div class="message-bubble sent">
-                        <div class="text">Hey! How are you doing today?</div>
-                        <div class="info">10:31 AM</div>
-                    </div>
-                    <div class="message-bubble received">
-                        <div class="text">I'm doing great! Just working on some projects. What about you?</div>
-                        <div class="info">10:32 AM</div>
-                    </div>
-                    <div class="message-bubble sent">
-                        <div class="text">Same here! Just exploring this new chat app. It looks really good!</div>
-                        <div class="info">10:33 AM</div>
-                    </div>
-                    <div class="notification">Today</div>
-                    <div class="message-bubble received">
-                        <div class="text">Yeah, they put a lot of effort into making it responsive and easy to use.</div>
-                        <div class="info">1:45 PM</div>
-                    </div>
-                    <div class="message-bubble sent">
-                        <div class="text">Absolutely! I love how it shows the online status and the clean UI.</div>
-                        <div class="info">1:47 PM</div>
-                    </div>
+                    <!-- Messages will appear here -->
                 </div>
                 <form id="message-form">
                     <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off" required>
@@ -793,7 +805,9 @@
             messages: document.getElementById('messages'),
             messageForm: document.getElementById('message-form'),
             messageInput: document.getElementById('message-input'),
-            menuToggle: document.querySelector('.menu-toggle')
+            menuToggle: document.querySelector('.menu-toggle'),
+            chatAvatar: document.getElementById('chat-avatar'),
+            chatName: document.getElementById('chat-name')
         };
 
         // --- AUTHENTICATION ---
@@ -816,7 +830,7 @@
 
         // --- INITIALIZATION ---
         async function initializeUser(user) {
-            elements.myAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=' + user.displayName + '&background=random';
+            elements.myAvatar.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=random`;
             elements.myProfileName.textContent = user.displayName || 'User';
             
             const userRef = doc(db, 'users', user.uid);
@@ -853,11 +867,10 @@
         function listenForUserData(uid) {
             const userRef = doc(db, 'users', uid);
             unsubscribeUser = onSnapshot(userRef, (doc) => {
-                const userData = doc.data();
-                if (userData && userData.friends) {
-                    renderFriendList(userData.friends);
+                if (doc.exists()) {
+                    const userData = doc.data();
+                    renderFriendList(userData.friends || []);
                 } else {
-                    // Handle case where user data doesn't exist yet
                     renderFriendList([]);
                 }
             });
@@ -896,7 +909,7 @@
             `;
             
             // Handle empty friends list
-            if (friendUids.length === 0) {
+            if (!friendUids || friendUids.length === 0) {
                 setTimeout(() => {
                     elements.friendList.innerHTML = `
                         <div class="empty-state">
@@ -905,7 +918,7 @@
                             <p>Search for users to add as friends</p>
                         </div>
                     `;
-                }, 500);
+                }, 300);
                 return;
             }
             
@@ -913,48 +926,40 @@
             const friendDocs = await Promise.all(friendUids.map(uid => getDoc(doc(db, 'users', uid))));
             friendsList = [];
             
-            let sarahExists = false;
+            elements.friendList.innerHTML = '';
             
             friendDocs.forEach(doc => {
                 if (doc.exists()) {
                     const friend = { uid: doc.id, ...doc.data() };
                     friendsList.push(friend);
-                    
-                    // Only show Sarah Miller as requested
-                    if (friend.displayName === "Sarah Miller") {
-                        createFriendListItem(friend);
-                        sarahExists = true;
-                    }
+                    createFriendListItem(friend);
                 }
             });
             
-            // If Sarah doesn't exist in friends, show empty state
-            if (!sarahExists) {
+            // Handle case where all friend docs don't exist
+            if (friendsList.length === 0) {
                 setTimeout(() => {
                     elements.friendList.innerHTML = `
                         <div class="empty-state">
                             <i class="fas fa-user-friends"></i>
-                            <p>Sarah Miller is not in your friends list</p>
-                            <p>Search for Sarah to add as a friend</p>
+                            <p>No active friends found</p>
+                            <p>Try adding new friends</p>
                         </div>
                     `;
-                }, 500);
+                }, 300);
             }
         }
         
         function createFriendListItem(friendData) {
-            // Clear loading state
-            elements.friendList.innerHTML = '';
-            
             const friendElement = document.createElement('div');
             friendElement.className = 'list-item';
             friendElement.innerHTML = `
-                <img src="${friendData.photoURL || 'https://ui-avatars.com/api/?name=' + friendData.displayName + '&background=random'}" alt="avatar">
+                <img src="${friendData.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(friendData.displayName)}&background=random`}" alt="avatar">
+                <div class="online-indicator"></div>
                 <div class="info">
                     <strong>${friendData.displayName}</strong>
                     <p>${friendData.chatId}</p>
                 </div>
-                <div class="status-indicator"></div>
             `;
             friendElement.addEventListener('click', () => openChat(friendData));
             elements.friendList.appendChild(friendElement);
@@ -971,7 +976,7 @@
             const item = document.createElement('div');
             item.className = 'list-item';
             item.innerHTML = `
-                <img src="${userData.photoURL || 'https://ui-avatars.com/api/?name=' + userData.displayName + '&background=random'}" alt="avatar">
+                <img src="${userData.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.displayName)}&background=random`}" alt="avatar">
                 <div class="info">
                     <strong>${userData.displayName}</strong>
                     <p>Friend request</p>
@@ -1028,7 +1033,7 @@
             }
             
             item.innerHTML = `
-                <img src="${userData.photoURL || 'https://ui-avatars.com/api/?name=' + userData.displayName + '&background=random'}" alt="avatar">
+                <img src="${userData.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.displayName)}&background=random`}" alt="avatar">
                 <div class="info">
                     <strong>${userData.displayName}</strong>
                     <p>${userData.chatId}</p>
@@ -1088,7 +1093,7 @@
             
             // Get current user's friends to determine relationship status
             const currentUserDoc = await getDoc(doc(db, 'users', currentUser.uid));
-            const { friends = [], sentRequests = [] } = currentUserDoc.data();
+            const { friends = [], sentRequests = [] } = currentUserDoc.data() || {};
             
             const results = Array.from(uniqueResults.values())
                 .map(doc => ({ uid: doc.id, ...doc.data() }))
@@ -1111,15 +1116,27 @@
                 to: toUid,
                 createdAt: serverTimestamp()
             });
+            
+            // Update user's sentRequests to track pending requests
+            const userRef = doc(db, 'users', currentUser.uid);
+            await updateDoc(userRef, {
+                sentRequests: arrayUnion(toUid)
+            });
         }
         
         async function acceptFriendRequest(requestId, fromUid) {
             const batch = writeBatch(db);
             // 1. Add each user to the other's friends list
             const currentUserRef = doc(db, 'users', currentUser.uid);
-            batch.update(currentUserRef, { friends: arrayUnion(fromUid) });
+            batch.update(currentUserRef, { 
+                friends: arrayUnion(fromUid),
+                receivedRequests: arrayRemove(fromUid)
+            });
             const otherUserRef = doc(db, 'users', fromUid);
-            batch.update(otherUserRef, { friends: arrayUnion(currentUser.uid) });
+            batch.update(otherUserRef, { 
+                friends: arrayUnion(currentUser.uid),
+                sentRequests: arrayRemove(currentUser.uid)
+            });
             // 2. Delete the friend request
             const requestRef = doc(db, 'friend_requests', requestId);
             batch.delete(requestRef);
@@ -1133,17 +1150,8 @@
         // --- CHAT LOGIC ---
         async function openChat(friend) {
             // Update chat header
-            const chatHeader = document.getElementById('chat-header');
-            chatHeader.innerHTML = `
-                <button class="menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <img src="${friend.photoURL || 'https://ui-avatars.com/api/?name=' + friend.displayName + '&background=random'}" alt="Friend avatar">
-                <div>
-                    <div>${friend.displayName}</div>
-                    <div class="status"><span class="status-indicator"></span> Online</div>
-                </div>
-            `;
+            elements.chatAvatar.src = friend.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(friend.displayName)}&background=random`;
+            elements.chatName.textContent = friend.displayName;
             
             // Set current chat user
             currentChatUser = friend;
@@ -1171,36 +1179,55 @@
             const messagesRef = collection(db, `chats/${chatId}/messages`);
             const q = query(messagesRef, orderBy('createdAt'));
             
+            let firstLoad = true;
             unsubscribeMessages = onSnapshot(q, (snapshot) => {
-                elements.messages.innerHTML = '';
-                snapshot.forEach(doc => {
-                    const msg = doc.data();
-                    const isSent = msg.senderId === currentUser.uid;
-                    const senderName = isSent ? 'You' : friend.displayName;
-                    
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = `message-bubble ${isSent ? 'sent' : 'received'}`;
-                    
-                    // Format timestamp
-                    let timeString = '';
-                    if (msg.createdAt) {
-                        const date = msg.createdAt.toDate();
-                        const hours = date.getHours();
-                        const minutes = date.getMinutes().toString().padStart(2, '0');
-                        timeString = `${hours}:${minutes}`;
-                    }
-                    
-                    messageDiv.innerHTML = `
-                        <div class="text">${msg.text}</div>
-                        <div class="info">${timeString}</div>
-                    `;
-                    
-                    elements.messages.appendChild(messageDiv);
-                });
+                // Only clear messages on first load
+                if (firstLoad) {
+                    elements.messages.innerHTML = '';
+                    firstLoad = false;
+                }
                 
-                // Scroll to bottom
-                elements.messages.scrollTop = elements.messages.scrollHeight;
+                snapshot.docChanges().forEach(change => {
+                    if (change.type === 'added') {
+                        const msg = change.doc.data();
+                        const isSent = msg.senderId === currentUser.uid;
+                        
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = `message-bubble ${isSent ? 'sent' : 'received'}`;
+                        
+                        // Format timestamp
+                        let timeString = '';
+                        if (msg.createdAt) {
+                            const date = msg.createdAt.toDate();
+                            const hours = date.getHours();
+                            const minutes = date.getMinutes().toString().padStart(2, '0');
+                            timeString = `${hours}:${minutes}`;
+                        }
+                        
+                        messageDiv.innerHTML = `
+                            <div class="text">${escapeHtml(msg.text)}</div>
+                            <div class="info">${timeString}</div>
+                        `;
+                        
+                        elements.messages.appendChild(messageDiv);
+                        
+                        // Scroll to bottom after adding new message
+                        elements.messages.scrollTop = elements.messages.scrollHeight;
+                    }
+                });
             });
+            
+            // Close sidebar on mobile
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
+        }
+        
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
         
         elements.messageForm.onsubmit = async (e) => {
@@ -1218,6 +1245,7 @@
             
             // Clear input
             elements.messageInput.value = '';
+            elements.messageInput.focus();
         };
 
         // --- TAB NAVIGATION ---
@@ -1228,6 +1256,16 @@
                 elements.tabContents.forEach(c => c.classList.add('hidden'));
                 document.getElementById(tab.dataset.tab + '-tab').classList.remove('hidden');
             };
+        });
+        
+        // Copy chat ID to clipboard
+        elements.myChatId.addEventListener('click', () => {
+            navigator.clipboard.writeText(elements.myChatId.textContent);
+            const originalText = elements.myChatId.textContent;
+            elements.myChatId.textContent = 'Copied!';
+            setTimeout(() => {
+                elements.myChatId.textContent = originalText;
+            }, 1000);
         });
         
         // Mobile menu toggle
